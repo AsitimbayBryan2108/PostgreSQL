@@ -1,0 +1,19 @@
+create table usuarios(
+usuarioId serial not null,
+nombre character varying not null,
+apellido character varying not null,
+username character varying not null,
+imagen character varying not null,
+clave character varying not null,
+estado character varying not null,
+constraint pk_userId primary key (usuarioId));
+
+create table mensajes(
+mensajeId serial not null,
+user1Id integer not null,
+user2Id integer not null,
+mensaje character varying not null,
+fecha timestamp not null,
+constraint pk_mensajeId primary key (mensajeId),
+constraint fk_user1Id foreign key (user1Id) references usuarios (usuarioId),
+constraint fk_user2Id foreign key (user2Id) references usuarios (usuarioId));

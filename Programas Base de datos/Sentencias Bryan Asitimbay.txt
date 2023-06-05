@@ -1,0 +1,49 @@
+--Sentencia 1 Bryan Asitimbay 
+SELECT p.nombreProd, c.nombreCtg FROM producto p 
+INNER JOIN categoria c ON p.cod_categoria = c.id_categoria;
+
+--Sentencia 2 Bryan Asitimbay
+SELECT e.apellidosEmp, COUNT(p.cod_empleado) as numPedidos FROM empleados e 
+LEFT JOIN pedido p ON e.id_empleado = p.cod_empleado 
+GROUP BY e.apellidosEmp ORDER BY numPedidos DESC;
+
+--Sentencia 3 Bryan Asitimbay 
+SELECT p.nombreProd, d.precioUnidad, d.cantidad, (d.precioUnidad * d.cantidad) as total FROM producto p 
+INNER JOIN detPedido d ON p.id_producto = d.cod_producto WHERE d.cod_pedido = 1;
+
+--Sentencia 4 Bryan Asitimbay
+SELECT c.nombreCli, COUNT(p.cod_cliente) as numPedidos FROM cliente c 
+LEFT JOIN pedido p ON c.id_cliente = p.cod_cliente 
+GROUP BY c.nombreCli ORDER BY numPedidos DESC LIMIT 5;
+
+--Sentencia 5 Bryan Asitimbay
+SELECT e.nombreEmp, SUM(d.precioUnidad * d.cantidad * (1 - d.descuento)) as totalVentas 
+FROM empleados e INNER JOIN pedido p ON e.id_empleado = p.cod_empleado 
+INNER JOIN detPedido d ON p.id_pedido = d.cod_pedido GROUP BY e.nombreEmp;
+
+--Sentencia 6 Bryan Asitimbay
+SELECT p.nombreProd, c.nombreCtg FROM producto p 
+INNER JOIN categoria c ON p.cod_categoria = c.id_categoria WHERE c.nombreCtg = 'Lacteos';
+
+--Sentencia 7 Bryan Asitimbay
+SELECT e.nombreEmp, AVG(EXTRACT(YEAR FROM AGE(e.fechaNacimiento))) as edadPromedio 
+FROM empleados e GROUP BY e.nombreEmp HAVING AVG(EXTRACT(YEAR FROM AGE(e.fechaNacimiento))) > 35 
+ORDER BY edadPromedio DESC;
+
+--Sentencia 8 Bryan Asitimbay
+SELECT p.nombreProd, d.cantidad FROM producto p INNER JOIN detPedido d ON p.id_producto = d.cod_producto 
+WHERE d.cod_pedido IN (SELECT id_pedido FROM pedido WHERE fechaPedido BETWEEN '2022-01-01' AND '2022-12-31');
+
+--Sentencia 9 Bryan Asitimbay
+SELECT nombreEmp, apellidosEmp, fechaContrato
+FROM empleados
+WHERE cargo = 'Conductor' AND fechaContrato BETWEEN '2022-01-01' AND '2022-12-31';
+
+--Sentencia 10 Bryan Asitimbay 
+SELECT p.fechaPedido, p.fechaEnvio, SUM(dp.precioUnidad * dp.cantidad - dp.descuento) AS total_pedido, e.nombreEmp
+FROM pedido p
+JOIN detPedido dp ON p.id_pedido = dp.cod_pedido
+JOIN empleados e ON p.cod_empleado = e.id_empleado
+WHERE p.cod_cliente = 1
+GROUP BY p.id_pedido, e.nombreEmp
+ORDER BY p.fechaPedido;
